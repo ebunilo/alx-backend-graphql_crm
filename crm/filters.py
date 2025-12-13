@@ -1,6 +1,6 @@
 import django_filters
 from django.db.models import Q
-from . import models
+from .models import Customer, Product, Order
 
 class CustomerFilter(django_filters.FilterSet):
     name = django_filters.CharFilter(field_name="name", lookup_expr="icontains")
@@ -16,7 +16,7 @@ class CustomerFilter(django_filters.FilterSet):
         return queryset
 
     class Meta:
-        model = models.Customer
+        model = Customer  # changed from models.Customer
         fields = ["name", "email", "created_at__gte", "created_at__lte", "phone_pattern"]
 
 class ProductFilter(django_filters.FilterSet):
@@ -33,7 +33,7 @@ class ProductFilter(django_filters.FilterSet):
         return queryset
 
     class Meta:
-        model = models.Product
+        model = Product  # changed from models.Product
         fields = ["name", "price__gte", "price__lte", "stock__gte", "stock__lte", "low_stock"]
 
 class OrderFilter(django_filters.FilterSet):
@@ -61,7 +61,7 @@ class OrderFilter(django_filters.FilterSet):
         return queryset
 
     class Meta:
-        model = models.Order
+        model = Order  # changed from models.Order
         fields = [
             "total_amount__gte",
             "total_amount__lte",
