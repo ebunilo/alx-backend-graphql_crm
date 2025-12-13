@@ -123,3 +123,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Graphene configuration: point to the project schema
+GRAPHENE = {
+    'SCHEMA': 'alx_backend_graphql.schema.schema',  # module path to graphene.Schema instance
+}
