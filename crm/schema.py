@@ -23,20 +23,26 @@ class ProductType(DjangoObjectType):
 class OrderType(DjangoObjectType):
     class Meta:
         model = models.Order
-        fields = ("id", "customer", "products", "order_date", "total_amount")
+        fields = ("id", "customer", "order_date", "total_amount")  # exclude auto-generated products
         interfaces = (graphene.relay.Node,)
 
     # Convenience field to query a single product (first associated)
     product = graphene.Field(lambda: ProductType)
 
     # Plain list of products to allow querying { name, price } directly
-    productsList = graphene.List(lambda: ProductType)
+    products = graphene.List(lambda: ProductType)
+
+    # Keep a Relay connection for products, if needed elsewhere
+    productsConnection = graphene.ConnectionField(ProductType._meta.connection)
 
     def resolve_product(self, info):
-        return self.products.first()
+        return self.products.all().first() or None
 
-    def resolve_productsList(self, info):
+    def resolve_products(self, info):
         return list(self.products.all())
+
+    def resolve_productsConnection(self, info, **kwargs):
+        return self.products.all()
 
 # Simple phone validator: +1234567890 or 123-456-7890 or 1234567890
 PHONE_REGEX = re.compile(r"^(\+\d{7,15}|\d{3}-\d{3}-\d{4}|\d{7,15})$")
