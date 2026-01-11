@@ -206,6 +206,20 @@ class CreateOrder(graphene.Mutation):
 
         return CreateOrder(order=order, ok=True, message="Order created successfully")
 
+class UpdateLowStockProducts(graphene.Mutation):
+    updated_products = graphene.List(ProductType)
+    message = graphene.String()
+
+    @staticmethod
+    def mutate(root, info):
+        products = models.Product.objects.filter(stock__lt=10)
+        updated = []
+        for product in products:
+            product.stock += 10
+            product.save()
+            updated.append(product)
+        return UpdateLowStockProducts(updated_products=updated, message="Low stock products updated successfully")
+
 # Filter input types to support a single "filter" arg
 class CustomerFilterInput(graphene.InputObjectType):
     nameIcontains = graphene.String(required=False)
@@ -311,3 +325,4 @@ class Mutation(graphene.ObjectType):
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()
