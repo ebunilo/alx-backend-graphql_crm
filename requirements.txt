@@ -4,3 +4,5 @@ graphene>=3.3.0
 graphql-core>=3.2.3
 django-crontab
 gql[requests]
+celery
+django-celery-beat
