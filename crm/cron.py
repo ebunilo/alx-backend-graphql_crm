@@ -1,5 +1,6 @@
 import datetime
-from alx_backend_graphql.schema import schema
+from gql.transport.requests import RequestsHTTPTransport
+from gql import gql, Client
 
 
 def log_crm_heartbeat():
@@ -11,15 +12,15 @@ def log_crm_heartbeat():
     
     # Optionally, query the GraphQL hello field to verify the endpoint is responsive
     try:
-        result = schema.execute("{ hello }")
-        if result.errors:
-            # Log error if needed
-            error_message = f"{timestamp} GraphQL query failed: {result.errors}\n"
-            with open("/tmp/crm_heartbeat_log.txt", "a") as f:
-                f.write(error_message)
-        else:
-            # Endpoint is responsive
-            pass
+        transport = RequestsHTTPTransport(url="http://localhost:8000/graphql")
+        client = Client(transport=transport, fetch_schema_from_transport=True)
+        query = gql("""
+            query {
+                hello
+            }
+        """)
+        result = client.execute(query)
+        # If no errors, it's responsive
     except Exception as e:
         error_message = f"{timestamp} Error querying GraphQL: {str(e)}\n"
         with open("/tmp/crm_heartbeat_log.txt", "a") as f:
