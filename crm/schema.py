@@ -5,6 +5,7 @@ from django.utils import timezone
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from decimal import Decimal
+from crm.models import Product
 from . import models
 from .filters import CustomerFilter, ProductFilter, OrderFilter
 
