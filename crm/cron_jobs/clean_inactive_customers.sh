@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -euo pipefail
 
 # Move to project root (script at crm/cron_jobs -> ../..)
@@ -32,4 +32,3 @@ timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 echo "$timestamp - Deleted $count inactive customers" >> /tmp/customer_cleanup_log.txt
 
 exit 0
-
